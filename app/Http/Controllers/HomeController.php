@@ -35,12 +35,23 @@ class HomeController extends Controller
     {
         $post = Posts::find($id);
 
-        // migrado para PostPolicy
-        // $this->authorize('update-post', $post); 
-        if (Gate::denies('update-post', $post)) {
-            abort(403, 'Você não tem autorização para editar esse post !');
-        }
-
         return view('update-post', compact('post'));
+    }
+
+    public function rolesPermissions()
+    {
+        $nameUser = auth()->user()->name;
+        echo "<h3>${nameUser}</h3>";
+
+        foreach (auth()->user()->roles as $role) {
+            echo "<b>$role->name -> </b>";
+
+            $permissions = $role->permissions;
+            foreach ($permissions as $permission) {
+                echo " $permission->name,";
+            }
+
+            echo '<hr>';
+        }
     }
 }
