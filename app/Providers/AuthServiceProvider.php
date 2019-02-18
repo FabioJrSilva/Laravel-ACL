@@ -6,6 +6,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 use App\Models\Posts;
 use App\Models\User;
+use App\Models\Permission;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Posts::class => 'App\Policies\PostPolicy',
+        // Posts::class => 'App\Policies\PostPolicy',
     ];
 
     /**
@@ -33,5 +34,12 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id == $post->user_id;
         }); 
          */
+
+        $permissions = Permission::with('roles')->get();
+        foreach ($permissions as $permission) {
+            Gate::define($permission->name, function (User $user) use ($permission) {
+                return $user->hasPermission($permission);
+            });
+        }
     }
 }
