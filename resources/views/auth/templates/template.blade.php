@@ -24,9 +24,9 @@
 		<div class="login-header">
 			<img src="{{ url("assets/painel/imgs/acl-branca.png") }}" alt="acl" class="logo-login">
 		</div>
-
+		
 		@yield('content-form')
-
+		
 	</div>
 </body>
 </html>
